@@ -1,6 +1,6 @@
 security:
     encoders:
-        App\Entity\Utilisateur:
+        App\Entity\User:
             algorithm: bcrypt
 
 

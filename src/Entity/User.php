@@ -80,18 +80,6 @@ class User implements UserInterface
      */
     private $password;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Groups({"post"})
-     * @Assert\NotBlank(groups={"post"})
-     * @Assert\Regex(
-     *      pattern="/(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{7,}/",
-     *      message="Password must be seven characters long and contain at least one digit, one upper case character",
-     *      groups={"post"}
-     * )
-     */
-    private $plainPassword;
-
      /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups({"put", "post"})
@@ -112,20 +100,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isEnabled;
-
-
-    public function getPlainPassword(): ?string
-    {
-        return $this->plainPassword;
-    }
-
-    public function setPlainPassword(string $plainPassword): self
-    {
-        $this->plainPassword = $plainPassword;
-
-        return $this;
-    }
+    private $isEnabled = false ;
 
     public function getId(): ?int
     {
