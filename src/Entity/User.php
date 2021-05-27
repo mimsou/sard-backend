@@ -100,7 +100,7 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isEnabled = false ;
+    private $isEnabled = false;
 
     public function getId(): ?int
     {

@@ -34,7 +34,8 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
-            user_checker: App\Security\UserEnabledChecker
+        
+            # user_checker: App\Security\UserEnabledChecker
         main:
             anonymous: lazy
             provider: app_user_provider
