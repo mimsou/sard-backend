@@ -2,11 +2,8 @@ security:
     encoders:
         App\Entity\User:
             algorithm: bcrypt
-
-
-
+            
     providers:
-
         app_user_provider:
             entity:
                 class: App\Entity\User
@@ -21,6 +18,7 @@ security:
             stateless: true
             anonymous: true
             form_login:
+                # Here authentication will happen (Token Generatrion)
                 check_path: /api/login
                 username_parameter: login
                 password_parameter: password
