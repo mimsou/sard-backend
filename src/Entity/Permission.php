@@ -3,16 +3,16 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\RoleRepository;
+use App\Repository\PermissionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=RoleRepository::class)
+ * @ORM\Entity(repositoryClass=PermissionRepository::class)
  */
-class Role
+class Permission
 {
     /**
      * @ORM\Id
@@ -27,18 +27,19 @@ class Role
     private $code;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $context;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Permission::class, inversedBy="roles")
+     * @ORM\ManyToMany(targetEntity=Role::class, mappedBy="Permission")
      */
-    private $Permission;
+    private $roles;
 
     public function __construct()
     {
-        $this->Permission = new ArrayCollection();
+        $this->role = new ArrayCollection();
+        $this->roles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -63,7 +64,7 @@ class Role
         return $this->context;
     }
 
-    public function setContext(string $context): self
+    public function setContext(?string $context): self
     {
         $this->context = $context;
 
@@ -71,25 +72,28 @@ class Role
     }
 
     /**
-     * @return Collection|Permission[]
+     * @return Collection|Role[]
      */
-    public function getPermission(): Collection
+    public function getRoles(): Collection
     {
-        return $this->Permission;
+        return $this->roles;
     }
 
-    public function addPermission(Permission $permission): self
+    public function addRole(Role $role): self
     {
-        if (!$this->Permission->contains($permission)) {
-            $this->Permission[] = $permission;
+        if (!$this->roles->contains($role)) {
+            $this->roles[] = $role;
+            $role->addPermission($this);
         }
 
         return $this;
     }
 
-    public function removePermission(Permission $permission): self
+    public function removeRole(Role $role): self
     {
-        $this->Permission->removeElement($permission);
+        if ($this->roles->removeElement($role)) {
+            $role->removePermission($this);
+        }
 
         return $this;
     }
