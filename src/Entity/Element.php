@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ElementRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -68,6 +70,16 @@ class Element
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="elements")
      */
     private $user;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Rapport::class, inversedBy="elements")
+     */
+    private $rapport;
+
+    public function __construct()
+    {
+        $this->rapport = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -190,6 +202,30 @@ class Element
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rapport[]
+     */
+    public function getRapport(): Collection
+    {
+        return $this->rapport;
+    }
+
+    public function addRapport(Rapport $rapport): self
+    {
+        if (!$this->rapport->contains($rapport)) {
+            $this->rapport[] = $rapport;
+        }
+
+        return $this;
+    }
+
+    public function removeRapport(Rapport $rapport): self
+    {
+        $this->rapport->removeElement($rapport);
 
         return $this;
     }
