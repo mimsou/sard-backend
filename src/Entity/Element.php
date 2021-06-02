@@ -7,12 +7,15 @@ use App\Repository\ElementRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use App\Entity\AuthoredEntityInterface;
+
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass=ElementRepository::class)
  */
-class Element
+class Element  implements AuthoredEntityInterface
 {
     /**
      * @ORM\Id
@@ -199,7 +202,7 @@ class Element
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(UserInterface $user): AuthoredEntityInterface
     {
         $this->user = $user;
 
