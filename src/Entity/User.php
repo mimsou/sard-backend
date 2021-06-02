@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
@@ -101,6 +103,22 @@ class User implements UserInterface
      * @ORM\Column(type="boolean")
      */
     private $isEnabled = false;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Rapport::class, mappedBy="user")
+     */
+    private $rapports;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Element::class, mappedBy="user")
+     */
+    private $elements;
+
+    public function __construct()
+    {
+        $this->rapports = new ArrayCollection();
+        $this->elements = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -215,6 +233,66 @@ class User implements UserInterface
     public function setIsEnabled(bool $isEnabled): self
     {
         $this->isEnabled = $isEnabled;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rapport[]
+     */
+    public function getRapports(): Collection
+    {
+        return $this->rapports;
+    }
+
+    public function addRapport(Rapport $rapport): self
+    {
+        if (!$this->rapports->contains($rapport)) {
+            $this->rapports[] = $rapport;
+            $rapport->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRapport(Rapport $rapport): self
+    {
+        if ($this->rapports->removeElement($rapport)) {
+            // set the owning side to null (unless already changed)
+            if ($rapport->getUser() === $this) {
+                $rapport->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Element[]
+     */
+    public function getElements(): Collection
+    {
+        return $this->elements;
+    }
+
+    public function addElement(Element $element): self
+    {
+        if (!$this->elements->contains($element)) {
+            $this->elements[] = $element;
+            $element->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeElement(Element $element): self
+    {
+        if ($this->elements->removeElement($element)) {
+            // set the owning side to null (unless already changed)
+            if ($element->getUser() === $this) {
+                $element->setUser(null);
+            }
+        }
 
         return $this;
     }
