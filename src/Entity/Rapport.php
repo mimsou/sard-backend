@@ -8,14 +8,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\AuthoredEntityInterface;
+use App\Entity\CreatedDateEntityInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert ;
 
 
 /**
  * @ApiResource()
  * @ORM\Entity(repositoryClass=RapportRepository::class)
  */
-class Rapport  implements AuthoredEntityInterface
+class Rapport  implements AuthoredEntityInterface, CreatedDateEntityInterface
 {
     /**
      * @ORM\Id
@@ -202,7 +204,7 @@ class Rapport  implements AuthoredEntityInterface
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): CreatedDateEntityInterface
     {
         $this->createdAt = $createdAt;
 

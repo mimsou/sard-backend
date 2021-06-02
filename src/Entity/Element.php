@@ -7,7 +7,9 @@ use App\Repository\ElementRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\CreatedDateEntityInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert ;
 use App\Entity\AuthoredEntityInterface;
 
 
@@ -15,7 +17,7 @@ use App\Entity\AuthoredEntityInterface;
  * @ApiResource()
  * @ORM\Entity(repositoryClass=ElementRepository::class)
  */
-class Element  implements AuthoredEntityInterface
+class Element  implements AuthoredEntityInterface, CreatedDateEntityInterface
 {
     /**
      * @ORM\Id
@@ -166,7 +168,7 @@ class Element  implements AuthoredEntityInterface
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): CreatedDateEntityInterface
     {
         $this->createdAt = $createdAt;
 
