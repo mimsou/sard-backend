@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Security;
 
 use App\Entity\User;
@@ -7,7 +6,7 @@ use Symfony\Component\Security\Core\Exception\DisabledException;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class UserEnabledChecker implements UserCheckerInterface
+class UserChecker implements UserCheckerInterface
 {
     /**
      * Checks the user account before authentication.
@@ -21,7 +20,7 @@ class UserEnabledChecker implements UserCheckerInterface
         }
 
         if (! $user->getIsEnabled()) {
-            throw new DisabledException();
+            throw new DisabledException('User account is disabled.');
         }
     }
     public function checkPostAuth(UserInterface $user){

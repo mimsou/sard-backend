@@ -24,6 +24,7 @@ security:
                 password_parameter: password
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+            user_checker: App\Security\UserChecker
         api:
             pattern: ^/api/
             stateless: true
@@ -32,11 +33,11 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
-        
-            user_checker: App\Security\UserEnabledChecker
+            
         main:
             anonymous: lazy
             provider: app_user_provider
+            
  
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
