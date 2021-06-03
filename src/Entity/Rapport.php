@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\RapportRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\RapportRepository;
 use App\Entity\AuthoredEntityInterface;
 use App\Entity\CreatedDateEntityInterface;
+use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert ;
 
@@ -78,6 +79,7 @@ class Rapport  implements AuthoredEntityInterface, CreatedDateEntityInterface
 
     /**
      * @ORM\ManyToMany(targetEntity=Element::class, mappedBy="rapport")
+     * @ApiSubresource()
      */
     private $elements;
 
