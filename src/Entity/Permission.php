@@ -37,10 +37,16 @@ class Permission
      */
     private $roles;
 
+    /**
+     * @ORM\OneToMany(targetEntity=View::class, mappedBy="permission")
+     */
+    private $views;
+
     public function __construct()
     {
         $this->role = new ArrayCollection();
         $this->roles = new ArrayCollection();
+        $this->views = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,6 +100,36 @@ class Permission
     {
         if ($this->roles->removeElement($role)) {
             $role->removePermission($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|View[]
+     */
+    public function getViews(): Collection
+    {
+        return $this->views;
+    }
+
+    public function addView(View $view): self
+    {
+        if (!$this->views->contains($view)) {
+            $this->views[] = $view;
+            $view->setPermission($this);
+        }
+
+        return $this;
+    }
+
+    public function removeView(View $view): self
+    {
+        if ($this->views->removeElement($view)) {
+            // set the owning side to null (unless already changed)
+            if ($view->getPermission() === $this) {
+                $view->setPermission(null);
+            }
         }
 
         return $this;

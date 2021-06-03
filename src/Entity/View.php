@@ -51,6 +51,11 @@ class View
      */
     private $menu;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Permission::class, inversedBy="views")
+     */
+    private $permission;
+
 
 
     public function getId(): ?int
@@ -126,6 +131,18 @@ class View
     public function setMenu(?Menu $menu): self
     {
         $this->menu = $menu;
+
+        return $this;
+    }
+
+    public function getPermission(): ?Permission
+    {
+        return $this->permission;
+    }
+
+    public function setPermission(?Permission $permission): self
+    {
+        $this->permission = $permission;
 
         return $this;
     }
