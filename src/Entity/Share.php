@@ -20,16 +20,6 @@ class Share
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, inversedBy="share", cascade={"persist", "remove"})
-     */
-    private $user;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Rapport::class, inversedBy="share", cascade={"persist", "remove"})
-     */
-    private $rapport;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $seen;
@@ -42,30 +32,6 @@ class Share
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    public function getRapport(): ?Rapport
-    {
-        return $this->rapport;
-    }
-
-    public function setRapport(?Rapport $rapport): self
-    {
-        $this->rapport = $rapport;
-
-        return $this;
     }
 
     public function getSeen(): ?bool

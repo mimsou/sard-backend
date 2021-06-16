@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
+use App\Controller\EnableUserController;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
@@ -31,6 +32,17 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *              },
  *              "normalization_context"={
  *                  "groups"={"get"}
+ *              }
+ *          },
+ *          "enable"={
+ *              "method"="post",
+ *              "path"="/users/{id}/enable",
+ *              "controller"= EnableUserController::class,
+ *              "denormalization_context"={
+ *                  "groups"={"enable-user"}
+ *              },
+ *              "normalization_context"={
+ *                  "groups"={"enable-user"}
  *              }
  *          }
  *      },
@@ -117,11 +129,6 @@ class User implements UserInterface
      * @ApiSubresource()
      */
     private $elements;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Share::class, mappedBy="user", cascade={"persist", "remove"})
-     */
-    private $share;
 
     /**
      * @ORM\OneToMany(targetEntity=Comments::class, mappedBy="user")
@@ -308,28 +315,6 @@ class User implements UserInterface
                 $element->setUser(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getShare(): ?Share
-    {
-        return $this->share;
-    }
-
-    public function setShare(?Share $share): self
-    {
-        // unset the owning side of the relation if necessary
-        if ($share === null && $this->share !== null) {
-            $this->share->setUser(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($share !== null && $share->getUser() !== $this) {
-            $share->setUser($this);
-        }
-
-        $this->share = $share;
 
         return $this;
     }
