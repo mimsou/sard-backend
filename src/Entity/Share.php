@@ -6,6 +6,7 @@ use App\Repository\ShareRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ApiResource()
  * @ORM\Entity(repositoryClass=ShareRepository::class)
  */
 class Share

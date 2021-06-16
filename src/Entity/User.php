@@ -123,10 +123,16 @@ class User implements UserInterface
      */
     private $share;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Comments::class, mappedBy="user")
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->rapports = new ArrayCollection();
         $this->elements = new ArrayCollection();
+        $this->comments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -324,6 +330,36 @@ class User implements UserInterface
         }
 
         $this->share = $share;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Comments[]
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comments $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comments $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
+            }
+        }
 
         return $this;
     }
