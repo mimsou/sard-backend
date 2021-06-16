@@ -137,6 +137,7 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Share::class, mappedBy="user")
+     * @ApiSubresource()
      */
     private $shares;
 

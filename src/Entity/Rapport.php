@@ -91,6 +91,7 @@ class Rapport  implements AuthoredEntityInterface, CreatedDateEntityInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Share::class, mappedBy="rapport")
+     * @ApiSubresource()
      */
     private $shares;
 
