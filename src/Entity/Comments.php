@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\CommentsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CommentsRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ApiResource()

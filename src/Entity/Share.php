@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\ShareRepository;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ShareRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ApiResource()
