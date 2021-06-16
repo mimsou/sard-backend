@@ -102,6 +102,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="boolean")
+     *  @Groups({"get"})
      */
     private $isEnabled = false;
 
@@ -116,6 +117,11 @@ class User implements UserInterface
      * @ApiSubresource()
      */
     private $elements;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Share::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $share;
 
     public function __construct()
     {
@@ -296,6 +302,28 @@ class User implements UserInterface
                 $element->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getShare(): ?Share
+    {
+        return $this->share;
+    }
+
+    public function setShare(?Share $share): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($share === null && $this->share !== null) {
+            $this->share->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($share !== null && $share->getUser() !== $this) {
+            $share->setUser($this);
+        }
+
+        $this->share = $share;
 
         return $this;
     }

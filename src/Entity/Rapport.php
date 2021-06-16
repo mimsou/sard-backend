@@ -83,6 +83,11 @@ class Rapport  implements AuthoredEntityInterface, CreatedDateEntityInterface
      */
     private $elements;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Share::class, mappedBy="rapport", cascade={"persist", "remove"})
+     */
+    private $share;
+
     public function __construct()
     {
         $this->elements = new ArrayCollection();
@@ -236,6 +241,28 @@ class Rapport  implements AuthoredEntityInterface, CreatedDateEntityInterface
         if ($this->elements->removeElement($element)) {
             $element->removeRapport($this);
         }
+
+        return $this;
+    }
+
+    public function getShare(): ?Share
+    {
+        return $this->share;
+    }
+
+    public function setShare(?Share $share): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($share === null && $this->share !== null) {
+            $this->share->setRapport(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($share !== null && $share->getRapport() !== $this) {
+            $share->setRapport($this);
+        }
+
+        $this->share = $share;
 
         return $this;
     }
