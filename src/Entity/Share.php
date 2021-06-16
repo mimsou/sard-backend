@@ -29,6 +29,16 @@ class Share
      */
     private $lastSeen;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="shares")
+     */
+    private $user;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Rapport::class, inversedBy="shares")
+     */
+    private $rapport;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -54,6 +64,30 @@ class Share
     public function setLastSeen(\DateTimeInterface $lastSeen): self
     {
         $this->lastSeen = $lastSeen;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    public function getRapport(): ?Rapport
+    {
+        return $this->rapport;
+    }
+
+    public function setRapport(?Rapport $rapport): self
+    {
+        $this->rapport = $rapport;
 
         return $this;
     }

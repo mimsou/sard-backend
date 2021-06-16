@@ -89,10 +89,16 @@ class Rapport  implements AuthoredEntityInterface, CreatedDateEntityInterface
      */
     private $comments;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Share::class, mappedBy="rapport")
+     */
+    private $shares;
+
     public function __construct()
     {
         $this->elements = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->shares = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -271,6 +277,36 @@ class Rapport  implements AuthoredEntityInterface, CreatedDateEntityInterface
             // set the owning side to null (unless already changed)
             if ($comment->getRapport() === $this) {
                 $comment->setRapport(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Share[]
+     */
+    public function getShares(): Collection
+    {
+        return $this->shares;
+    }
+
+    public function addShare(Share $share): self
+    {
+        if (!$this->shares->contains($share)) {
+            $this->shares[] = $share;
+            $share->setRapport($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShare(Share $share): self
+    {
+        if ($this->shares->removeElement($share)) {
+            // set the owning side to null (unless already changed)
+            if ($share->getRapport() === $this) {
+                $share->setRapport(null);
             }
         }
 
