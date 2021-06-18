@@ -47,7 +47,7 @@ class Comments implements AuthoredEntityInterface, CreatedDateEntityInterface
     private $createdAt;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable = true, options={"default":1})
      * @Groups({"read:comments:item"})
      */
     private $isPublished;
