@@ -106,7 +106,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"get", "put", "post"})
+     * @Groups({"get", "put", "post", "read:rapport:owner", "read:comments:owner"})
      * @Assert\NotBlank(groups={"post", "put"})
      * @Assert\Length(min=6, max=255, groups={"post"})
      */
@@ -120,13 +120,11 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Rapport::class, mappedBy="user")
-     * @ApiSubresource()
      */
     private $rapports;
 
     /**
      * @ORM\OneToMany(targetEntity=Element::class, mappedBy="user")
-     * @ApiSubresource()
      */
     private $elements;
 

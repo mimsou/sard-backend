@@ -16,7 +16,7 @@ security:
         login:
             pattern: ^/api/login
             stateless: true
-            anonymous: true
+            anonymous: ~
             form_login:
                 # Here authentication will happen (Token Generatrion)
                 check_path: /api/login
@@ -28,14 +28,14 @@ security:
         api:
             pattern: ^/api/
             stateless: true
-            anonymous: true
+            anonymous: ~
             provider: app_user_provider
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
             
         main:
-            anonymous: lazy
+            anonymous: ~
             provider: app_user_provider
             
  

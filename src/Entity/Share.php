@@ -7,7 +7,15 @@ use App\Repository\ShareRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      subresourceOperations={
+ *          "api_user_shared_rapport_get_subresource"={
+ *              "normalization_context"={
+ *                  "groups"={"get-rapport-with-user"}
+ *              }
+ *          }
+ *      }
+ * )
  * @ORM\Entity(repositoryClass=ShareRepository::class)
  */
 class Share

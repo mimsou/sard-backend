@@ -10,12 +10,22 @@ use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert ;
 
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      normalizationContext={"groups" = {"read:rapport:collection"}},
+ *      itemOperations={
+ *          "get" = {
+ *              "normalization_context" = {
+ *                  "groups" = {"read:rapport:collection", "read:rapport:item", "read:rapport:comments", "read:rapport:owner"}
+ *              }
+ *          }
+ *      }
+ * )
  * @ORM\Entity(repositoryClass=RapportRepository::class)
  */
 class Rapport  implements AuthoredEntityInterface, CreatedDateEntityInterface
@@ -24,46 +34,55 @@ class Rapport  implements AuthoredEntityInterface, CreatedDateEntityInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"read:rapport:collection"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read:rapport:collection", "read:rapport:item"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"read:rapport:item"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"read:rapport:item"})
      */
     private $start;
 
     /**
      * @ORM\Column(type="date")
+     * @Groups({"read:rapport:item"})
      */
     private $end;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read:rapport:item"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Groups({"read:rapport:item"})
      */
     private $template;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="rapports")
+     * @Groups({"read:rapport:collection"})
      */
     private $user;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
+     * @Groups({"read:rapport:collection", "read:rapport:item"})
      */
     private $isPublished;
 
@@ -74,12 +93,12 @@ class Rapport  implements AuthoredEntityInterface, CreatedDateEntityInterface
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"read:rapport:collection"})
      */
     private $createdAt;
 
     /**
      * @ORM\ManyToMany(targetEntity=Element::class, mappedBy="rapport")
-     * @ApiSubresource()
      */
     private $elements;
 
@@ -91,7 +110,6 @@ class Rapport  implements AuthoredEntityInterface, CreatedDateEntityInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Share::class, mappedBy="rapport")
-     * @ApiSubresource()
      */
     private $shares;
 

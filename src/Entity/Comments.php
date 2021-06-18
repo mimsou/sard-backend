@@ -4,38 +4,57 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommentsRepository;
+use App\Entity\AuthoredEntityInterface;
+use App\Entity\CreatedDateEntityInterface;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ApiResource()
+ * @ApiResource(
+ *      normalizationContext={"groups" = {"read:comments:collection"}},
+ *      itemOperations={
+ *          "get" = {
+ *              "normalization_context" = {
+ *                  "groups" = {"read:comments:collection", "read:comments:item", "read:comments:owner"}
+ *              }
+ *          }
+ *      }
+ * )
  * @ORM\Entity(repositoryClass=CommentsRepository::class)
  */
-class Comments
+class Comments implements AuthoredEntityInterface, CreatedDateEntityInterface
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"read:rapport:comments", "read:comments:collection"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"read:rapport:comments", "read:comments:collection", "read:comments:item"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Groups({"read:rapport:comments", "read:comments:collection", "read:comments:item"})
      */
     private $createdAt;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Groups({"read:comments:item"})
      */
     private $isPublished;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
+     * @Groups({"read:comments:collection", "read:comments:owner"})
      */
     private $user;
 
@@ -66,7 +85,7 @@ class Comments
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTimeInterface $createdAt): CreatedDateEntityInterface
     {
         $this->createdAt = $createdAt;
 
@@ -90,7 +109,7 @@ class Comments
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(UserInterface $user): AuthoredEntityInterface
     {
         $this->user = $user;
 
