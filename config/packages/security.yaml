@@ -1,47 +1,35 @@
 security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     encoders:
-        App\Entity\User:
-            algorithm: bcrypt
-            
+        App\Entity\User: bcrypt
     providers:
-        app_user_provider:
+        # users_in_memory: { memory: null }
+        database:
             entity:
                 class: App\Entity\User
                 property: login
- 
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        login:
-            pattern: ^/api/login
+        api: 
+            pattern: ^/api
             stateless: true
-            anonymous: ~
-            form_login:
-                # Here authentication will happen (Token Generatrion)
-                check_path: /api/login
-                username_parameter: login
-                password_parameter: password
-                success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
-            user_checker: App\Security\UserChecker
-        api:
-            pattern: ^/api/
-            stateless: true
-            anonymous: ~
-            provider: app_user_provider
+            anonymous: true
+            json_login:
+                # here authentication will happen (token generation)
+                check_path: /api/login_check
+                success_handler:    lexik_jwt_authentication.handler.authentication_success
+                failure_handler:    lexik_jwt_authentication.handler.authentication_failure
             guard:
                 authenticators:
-                    - lexik_jwt_authentication.jwt_token_authenticator
-            
-        main:
-            anonymous: ~
-            provider: app_user_provider
-            
- 
+                    # - lexik_jwt_authentication.jwt_token_authenticator
+                    - App\Security\TokenAuthenticator
+            user_checker: App\Security\UserChecker
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/api/docs, roles: IS_AUTHENTICATED_ANONYMOUSLY } # Allows accessing the Swagger UI
-        - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/api/user, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+        # - { path: ^/api,       roles: IS_AUTHENTICATED_ANONYMOUSLY }
